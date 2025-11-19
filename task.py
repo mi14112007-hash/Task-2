@@ -4,19 +4,18 @@ import argparse
 import sys
 import os
 
-def main():
-    parser = argparse.ArgumentParser(description='Визуализатор графа зависимостей')
-    parser.add_argument('--config', required=True, help='Путь к INI-файлу конфигурации')
-    args = parser.parse_args()
+def run_stage1(config_path):
+    """Выполнение этапа 1"""
+    print("=== ЭТАП 1: МИНИМАЛЬНЫЙ ПРОТОТИП С КОНФИГУРАЦИЕЙ ===")
     
     # 1. Чтение INI конфигурации
-    if not os.path.exists(args.config):
-        print(f"Ошибка: файл {args.config} не найден")
+    if not os.path.exists(config_path):
+        print(f"Ошибка: файл {config_path} не найден")
         return 1
     
     config = configparser.ConfigParser()
     try:
-        config.read(args.config)
+        config.read(config_path)
     except Exception as e:
         print(f"Ошибка чтения конфигурации: {e}")
         return 1
@@ -68,6 +67,18 @@ def main():
     
     print("Конфигурация загружена успешно")
     return 0
+
+def main():
+    parser = argparse.ArgumentParser(description='Визуализатор графа зависимостей')
+    parser.add_argument('--config', required=True, help='Путь к INI-файлу конфигурации')
+    parser.add_argument('--stage', type=int, default=1, help='Номер этапа для выполнения (1-5)')
+    args = parser.parse_args()
+    
+    if args.stage == 1:
+        return run_stage1(args.config)
+    else:
+        print(f"Этап {args.stage} еще не реализован")
+        return 1
 
 if __name__ == "__main__":
     sys.exit(main())
